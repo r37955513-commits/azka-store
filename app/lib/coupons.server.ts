@@ -1,4 +1,5 @@
 import { sql, type Coupon } from "./db.server";
+import { fmt } from "./money";
 
 export type CouponResult =
   | { ok: true; coupon: Coupon; discount: number }
@@ -23,7 +24,7 @@ export async function validateCoupon(
   if (subtotal < Number(coupon.min_order)) {
     return {
       ok: false,
-      error: `الحد الأدنى للطلب لتطبيق هذا الكوبون هو ${coupon.min_order}$`,
+      error: `الحد الأدنى للطلب لتطبيق هذا الكوبون هو ${fmt(coupon.min_order)}`,
     };
   }
 

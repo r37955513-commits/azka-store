@@ -1,3 +1,5 @@
+import { fmt } from "./money";
+
 /**
  * إشعارات WhatsApp عبر Meta Cloud API.
  */
@@ -47,7 +49,7 @@ export function newOrderMessage(opts: {
     `🛒 طلب جديد في أذكى متجر\n` +
     `رقم الطلب: #${opts.orderId}\n` +
     `الخدمة: ${opts.product}\n` +
-    `الإجمالي: ${opts.total}$\n` +
+    `الإجمالي: ${fmt(opts.total)}\n` +
     `هاتف العميل: ${opts.phone}`
   );
 }
@@ -60,7 +62,7 @@ export function newTopupMessage(opts: {
   return (
     `💰 طلب شحن محفظة جديد\n` +
     `رقم الطلب: #${opts.topupId}\n` +
-    `المبلغ: ${opts.amount}$\n` +
+    `المبلغ: ${fmt(opts.amount)}\n` +
     `هاتف العميل: ${opts.phone}\n` +
     `يرجى مراجعة صورة الإشعار في لوحة التحكم.`
   );

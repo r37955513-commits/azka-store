@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { Wallet, Sparkles, ShieldCheck } from "lucide-react";
+import { fmt } from "~/lib/money";
 
 export function Navbar({ balance }: { balance?: string | null }) {
   return (
@@ -20,7 +21,7 @@ export function Navbar({ balance }: { balance?: string | null }) {
             <Wallet className="h-4 w-4 text-brand-600" />
             <span className="hidden sm:inline">المحفظة</span>
             {balance != null && (
-              <span className="badge bg-brand-50 text-brand-700">{balance}$</span>
+              <span className="badge bg-brand-50 text-brand-700">{fmt(balance)}</span>
             )}
           </Link>
           <Link to="/admin/login" className="btn-ghost" title="لوحة التحكم">
