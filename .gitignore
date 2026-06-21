@@ -1,6 +1,7 @@
 node_modules
 .react-router
 build
+.vercel
 .env
 .env.local
 public/uploads/*
