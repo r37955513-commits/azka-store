@@ -1,0 +1,9 @@
+node_modules
+.react-router
+build
+.env
+.env.local
+public/uploads/*
+!public/uploads/.gitkeep
+*.log
+.DS_Store
