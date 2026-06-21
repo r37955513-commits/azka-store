@@ -7,8 +7,9 @@ import { sql, getOrCreateUser, getWallet } from "~/lib/db.server";
 import { saveReceipt } from "~/lib/uploads.server";
 import { notifyAdmin, newTopupMessage } from "~/lib/whatsapp.server";
 import { Navbar } from "~/components/Navbar";
+import { fmt } from "~/lib/money";
 
-const PRESET_AMOUNTS = [5, 10, 20, 50, 100];
+const PRESET_AMOUNTS = [5000, 10000, 25000, 50000, 100000];
 
 export async function action({ request }: Route.ActionArgs) {
   const form = await request.formData();
@@ -62,7 +63,7 @@ export default function WalletPage() {
   const result = useActionData<typeof action>();
   const nav = useNavigation();
   const busy = nav.state !== "idle";
-  const [amount, setAmount] = useState<number>(10);
+  const [amount, setAmount] = useState<number>(10000);
 
   useEffect(() => {
     if (result && "error" in result && result.error) toast.error(result.error);
@@ -86,7 +87,7 @@ export default function WalletPage() {
         <div className="card mb-6 bg-gradient-to-l from-brand-700 to-brand-500 p-6 text-white">
           <p className="text-sm text-brand-50">الرصيد الحالي</p>
           <p className="mt-1 text-4xl font-extrabold">
-            {balance ?? "—"} <span className="text-xl">$</span>
+            {balance != null ? fmt(balance) : "—"}
           </p>
           <Form method="post" className="mt-4 flex gap-2">
             <input type="hidden" name="intent" value="check" />
@@ -134,7 +135,7 @@ export default function WalletPage() {
                         : "border-slate-200 text-slate-600 hover:border-brand-300"
                     }`}
                   >
-                    {a}$
+                    {fmt(a)}
                   </button>
                 ))}
               </div>
@@ -185,7 +186,7 @@ export default function WalletPage() {
                     }
                   >
                     {Number(t.amount) >= 0 ? "+" : ""}
-                    {t.amount}$
+                    {fmt(t.amount)}
                   </span>
                 </li>
               ))}

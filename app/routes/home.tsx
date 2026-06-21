@@ -3,6 +3,7 @@ import { ShoppingCart, Zap } from "lucide-react";
 import { sql, type Category, type Product } from "~/lib/db.server";
 import { Navbar } from "~/components/Navbar";
 import { CategoryIcon } from "~/components/icons";
+import { fmt } from "~/lib/money";
 
 export function meta() {
   return [
@@ -98,7 +99,7 @@ function ProductCard({ product }: { product: Product }) {
         <p className="mt-1 line-clamp-1 text-xs text-slate-400">{product.description}</p>
       )}
       <div className="mt-3 flex items-center justify-between">
-        <span className="text-lg font-extrabold text-brand-700">{product.price}$</span>
+        <span className="text-lg font-extrabold text-brand-700">{fmt(product.price)}</span>
         <Link to={`/checkout/${product.id}`} className="btn-primary px-3 py-1.5 text-sm">
           شراء
         </Link>
