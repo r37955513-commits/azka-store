@@ -22,6 +22,7 @@ import {
 import { validateCoupon, incrementCouponUsage } from "~/lib/coupons.server";
 import { notifyAdmin, newOrderMessage } from "~/lib/whatsapp.server";
 import { Navbar } from "~/components/Navbar";
+import { fmt } from "~/lib/money";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const rows = (await sql`
@@ -157,7 +158,7 @@ export default function Checkout() {
             </div>
             <div>
               <h1 className="text-lg font-extrabold text-slate-800">{product.name}</h1>
-              <p className="text-brand-700 font-bold">{product.price}$</p>
+              <p className="text-brand-700 font-bold">{fmt(product.price)}</p>
             </div>
           </div>
 
@@ -188,6 +189,7 @@ export default function Checkout() {
               />
             </div>
 
+            {/* كوبون */}
             <div>
               <label className="mb-1 block text-sm font-semibold text-slate-600">
                 كود الخصم
@@ -215,6 +217,7 @@ export default function Checkout() {
               </div>
             </div>
 
+            {/* طريقة الدفع */}
             <div>
               <label className="mb-2 block text-sm font-semibold text-slate-600">
                 طريقة الدفع
@@ -246,15 +249,16 @@ export default function Checkout() {
               </div>
             </div>
 
+            {/* الملخص */}
             <div className="rounded-xl bg-slate-50 p-4 text-sm">
-              <Row label="المجموع الفرعي" value={`${subtotal.toFixed(2)}$`} />
+              <Row label="المجموع الفرعي" value={fmt(subtotal)} />
               {discount > 0 && (
-                <Row label="الخصم" value={`- ${discount.toFixed(2)}$`} accent />
+                <Row label="الخصم" value={`- ${fmt(discount)}`} accent />
               )}
               <div className="mt-2 flex items-center justify-between border-t border-slate-200 pt-2">
                 <span className="font-bold text-slate-700">الإجمالي</span>
                 <span className="text-lg font-extrabold text-brand-700">
-                  {total.toFixed(2)}$
+                  {fmt(total)}
                 </span>
               </div>
             </div>

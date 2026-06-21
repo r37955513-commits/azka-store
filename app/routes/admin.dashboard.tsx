@@ -9,6 +9,7 @@ import {
 import type { Route } from "./+types/admin.dashboard";
 import { requireAdmin } from "~/lib/session.server";
 import { sql } from "~/lib/db.server";
+import { fmt } from "~/lib/money";
 
 export async function loader({ request }: Route.LoaderArgs) {
   await requireAdmin(request);
@@ -41,11 +42,11 @@ export default function Dashboard() {
   const d = useLoaderData<typeof loader>();
 
   const cards = [
-    { label: "إجمالي المبيعات", value: `${Number(d.totalSales).toFixed(2)}$`, icon: DollarSign, color: "bg-emerald-50 text-emerald-600" },
+    { label: "إجمالي المبيعات", value: fmt(d.totalSales), icon: DollarSign, color: "bg-emerald-50 text-emerald-600" },
     { label: "عدد الطلبات", value: d.totalOrders, icon: ShoppingBag, color: "bg-brand-50 text-brand-600" },
     { label: "طلبات قيد الانتظار", value: d.pendingOrders, icon: Clock, color: "bg-amber-50 text-amber-600" },
     { label: "طلبات شحن معلّقة", value: d.pendingTopups, icon: Wallet, color: "bg-rose-50 text-rose-600" },
-    { label: "إجمالي أرصدة المحافظ", value: `${Number(d.walletTotal).toFixed(2)}$`, icon: TrendingUp, color: "bg-violet-50 text-violet-600" },
+    { label: "إجمالي أرصدة المحافظ", value: fmt(d.walletTotal), icon: TrendingUp, color: "bg-violet-50 text-violet-600" },
   ];
 
   return (
@@ -85,7 +86,7 @@ export default function Dashboard() {
                   <td className="p-3 font-bold text-slate-400">#{o.id}</td>
                   <td className="p-3 text-slate-700">{o.product_name}</td>
                   <td className="p-3 text-slate-500">{o.phone}</td>
-                  <td className="p-3 font-bold text-brand-700">{o.total}$</td>
+                  <td className="p-3 font-bold text-brand-700">{fmt(o.total)}</td>
                   <td className="p-3"><StatusBadge status={o.status} /></td>
                 </tr>
               ))}
