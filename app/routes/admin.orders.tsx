@@ -5,6 +5,7 @@ import { CheckCircle2, XCircle, RotateCcw } from "lucide-react";
 import type { Route } from "./+types/admin.orders";
 import { requireAdmin } from "~/lib/session.server";
 import { sql, adjustWallet, type Order } from "~/lib/db.server";
+import { fmt } from "~/lib/money";
 
 export async function loader({ request }: Route.LoaderArgs) {
   await requireAdmin(request);
@@ -100,7 +101,7 @@ export default function AdminOrders() {
                   <td className="p-3 text-slate-700">{o.product_name}</td>
                   <td className="p-3 text-slate-500">{o.player_id || "—"}</td>
                   <td className="p-3 text-slate-500">{o.phone}</td>
-                  <td className="p-3 font-bold text-brand-700">{o.total}$</td>
+                  <td className="p-3 font-bold text-brand-700">{fmt(o.total)}</td>
                   <td className="p-3 text-slate-500">
                     {o.payment_method === "wallet" ? "محفظة" : "يدوي"}
                   </td>

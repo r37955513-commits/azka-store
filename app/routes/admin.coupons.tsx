@@ -5,6 +5,7 @@ import { Ticket, Plus, Power, Trash2 } from "lucide-react";
 import type { Route } from "./+types/admin.coupons";
 import { requireAdmin } from "~/lib/session.server";
 import { sql, type Coupon } from "~/lib/db.server";
+import { fmt } from "~/lib/money";
 
 export async function loader({ request }: Route.LoaderArgs) {
   await requireAdmin(request);
@@ -78,7 +79,7 @@ export default function AdminCoupons() {
             <div className="grid grid-cols-2 gap-2">
               <select name="discount_type" className="input">
                 <option value="percent">نسبة %</option>
-                <option value="fixed">مبلغ ثابت $</option>
+                <option value="fixed">مبلغ ثابت (ج.س)</option>
               </select>
               <input
                 type="number"
@@ -93,7 +94,7 @@ export default function AdminCoupons() {
               type="number"
               name="min_order"
               step="0.01"
-              placeholder="الحد الأدنى للطلب $"
+              placeholder="الحد الأدنى للطلب (ج.س)"
               className="input"
             />
             <input
@@ -132,9 +133,9 @@ export default function AdminCoupons() {
                     <td className="p-3 text-slate-600">
                       {c.discount_type === "percent"
                         ? `${c.discount_value}%`
-                        : `${c.discount_value}$`}
+                        : fmt(c.discount_value)}
                     </td>
-                    <td className="p-3 text-slate-500">{c.min_order}$</td>
+                    <td className="p-3 text-slate-500">{fmt(c.min_order)}</td>
                     <td className="p-3 text-slate-500">
                       {c.used_count}
                       {c.max_uses ? ` / ${c.max_uses}` : ""}

@@ -4,6 +4,7 @@ import type { Route } from "./+types/admin.topups";
 import { requireAdmin } from "~/lib/session.server";
 import { sql, adjustWallet, type Topup } from "~/lib/db.server";
 import { notifyAdmin } from "~/lib/whatsapp.server";
+import { fmt } from "~/lib/money";
 
 export async function loader({ request }: Route.LoaderArgs) {
   await requireAdmin(request);
@@ -35,7 +36,7 @@ export async function action({ request }: Route.ActionArgs) {
   if (decision === "approve") {
     await adjustWallet(topup.user_id, Number(topup.amount), "topup", `topup#${id}`);
     await sql`UPDATE topups SET status='approved', updated_at=now() WHERE id=${id}`;
-    await notifyAdmin(`✅ تم اعتماد شحن المحفظة #${id} بمبلغ ${topup.amount}$`);
+    await notifyAdmin(`✅ تم اعتماد شحن المحفظة #${id} بمبلغ ${fmt(topup.amount)}`);
   } else {
     await sql`UPDATE topups SET status='rejected', updated_at=now() WHERE id=${id}`;
   }
@@ -94,7 +95,7 @@ export default function AdminTopups() {
             <div className="p-4">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-400">#{t.id}</span>
-                <span className="text-lg font-extrabold text-brand-700">{t.amount}$</span>
+                <span className="text-lg font-extrabold text-brand-700">{fmt(t.amount)}</span>
               </div>
               <p className="mt-1 text-sm text-slate-500">الهاتف: {t.phone}</p>
               <p className="text-xs text-slate-400">
